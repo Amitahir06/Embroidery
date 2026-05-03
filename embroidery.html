@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="ur">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ज़री कला – Embroidery Design Studio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:wght@300;400;600&family=Noto+Nastaliq+Urdu&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --cream: #faf5ec;
+      --gold: #c9a84c;
+      --gold-light: #e8c97a;
+      --deep: #1a0f00;
+      --maroon: #6b1a1a;
+      --rose: #b5415b;
+      --thread: #8b4513;
+      --ivory: #f5f0e8;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--cream);
+      color: var(--deep);
+      font-family: 'Cormorant Garamond', serif;
+      overflow-x: hidden;
+    }
+
+    /* ── DECORATIVE SVG BORDER PATTERN ── */
+    .border-pattern {
+      width: 100%;
+      height: 12px;
+      background: repeating-linear-gradient(
+        90deg,
+        var(--gold) 0px, var(--gold) 4px,
+        transparent 4px, transparent 12px,
+        var(--maroon) 12px, var(--maroon) 16px,
+        transparent 16px, transparent 24px
+      );
+      opacity: 0.6;
+    }
+
+    /* ── NAVBAR ── */
+    nav {
+      position: fixed; top: 0; width: 100%; z-index: 100;
+      background: rgba(26,15,0,0.95);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--gold);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 5vw;
+      height: 70px;
+    }
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      color: var(--gold);
+      letter-spacing: 2px;
+    }
+    .nav-logo span { font-style: italic; color: var(--gold-light); }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav-links a {
+      color: var(--ivory);
+      text-decoration: none;
+      font-size: 0.9rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      transition: color 0.3s;
+    }
+    .nav-links a:hover { color: var(--gold-light); }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      background: var(--deep);
+      display: flex; align-items: center; justify-content: center;
+      position: relative;
+      overflow: hidden;
+      padding-top: 70px;
+    }
+
+    /* Mandala background */
+    .mandala-bg {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0.07;
+      animation: slowSpin 60s linear infinite;
+    }
+    .mandala-bg svg { width: min(90vw, 800px); height: min(90vw, 800px); }
+    @keyframes slowSpin { to { transform: rotate(360deg); } }
+
+    /* Gold shimmer lines */
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 50% 50%, rgba(201,168,76,0.08) 0%, transparent 70%);
+    }
+
+    .hero-content {
+      position: relative; z-index: 2;
+      text-align: center;
+      padding: 2rem;
+      animation: fadeUp 1.2s ease both;
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(40px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero-tagline {
+      font-family: 'Noto Nastaliq Urdu', serif;
+      color: var(--gold);
+      font-size: clamp(1rem, 2vw, 1.3rem);
+      letter-spacing: 3px;
+      margin-bottom: 1.2rem;
+      opacity: 0;
+      animation: fadeUp 1s 0.3s ease both;
+    }
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3rem, 8vw, 6.5rem);
+      color: var(--cream);
+      line-height: 1.05;
+      opacity: 0;
+      animation: fadeUp 1s 0.5s ease both;
+    }
+    .hero h1 em {
+      display: block;
+      font-style: italic;
+      color: var(--gold);
+      font-size: 85%;
+    }
+    .hero-sub {
+      margin: 1.8rem auto 0;
+      max-width: 520px;
+      color: rgba(245,240,232,0.7);
+      font-size: 1.15rem;
+      line-height: 1.8;
+      opacity: 0;
+      animation: fadeUp 1s 0.7s ease both;
+    }
+    .hero-cta {
+      display: inline-block;
+      margin-top: 2.5rem;
+      padding: 1rem 2.8rem;
+      border: 1.5px solid var(--gold);
+      color: var(--gold);
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      text-decoration: none;
+      position: relative; overflow: hidden;
+      transition: color 0.4s;
+      opacity: 0;
+      animation: fadeUp 1s 0.9s ease both;
+    }
+    .hero-cta::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: var(--gold);
+      transform: scaleX(0); transform-origin: left;
+      transition: transform 0.4s ease;
+    }
+    .hero-cta:hover { color: var(--deep); }
+    .hero-cta:hover::before { transform: scaleX(1); }
+    .hero-cta span { position: relative; z-index: 1; }
+
+    /* Scroll indicator */
+    .scroll-hint {
+      position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 0.4rem;
+      color: rgba(201,168,76,0.5); font-size: 0.7rem; letter-spacing: 2px;
+      text-transform: uppercase;
+      animation: bounce 2s infinite;
+    }
+    .scroll-hint::after {
+      content: '';
+      display: block; width: 1px; height: 50px;
+      background: linear-gradient(to bottom, var(--gold), transparent);
+    }
+    @keyframes bounce {
+      0%,100% { transform: translateX(-50%) translateY(0); }
+      50%      { transform: translateX(-50%) translateY(8px); }
+    }
+
+    /* ── SECTION SHARED ── */
+    section { padding: 6rem 5vw; }
+    .section-label {
+      font-size: 0.7rem;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.6rem;
+    }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      line-height: 1.15;
+      color: var(--deep);
+    }
+    .section-title em { font-style: italic; color: var(--maroon); }
+    .divider {
+      width: 80px; height: 2px;
+      background: linear-gradient(to right, var(--gold), var(--maroon));
+      margin: 1.5rem 0 2.5rem;
+    }
+
+    /* ── ABOUT ── */
+    .about {
+      background: var(--ivory);
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 5rem; align-items: center;
+    }
+    .about-img {
+      position: relative;
+    }
+    .about-img-frame {
+      width: 100%; aspect-ratio: 3/4;
+      background: linear-gradient(135deg, var(--maroon) 0%, var(--deep) 100%);
+      border-radius: 2px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 8rem;
+      overflow: hidden;
+      position: relative;
+    }
+    .about-img-frame::after {
+      content: '';
+      position: absolute; inset: 12px;
+      border: 1px solid rgba(201,168,76,0.4);
+      pointer-events: none;
+    }
+    .about-badge {
+      position: absolute; bottom: -1.5rem; right: -1.5rem;
+      width: 110px; height: 110px;
+      border-radius: 50%;
+      background: var(--gold);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      font-family: 'Playfair Display', serif;
+      color: var(--deep);
+      font-size: 0.75rem;
+      text-align: center; line-height: 1.3;
+      box-shadow: 0 8px 30px rgba(201,168,76,0.4);
+    }
+    .about-badge strong { font-size: 1.8rem; display: block; }
+    .about-text p {
+      color: #4a3520;
+      font-size: 1.1rem;
+      line-height: 1.9;
+      margin-bottom: 1.2rem;
+    }
+    .stats-row {
+      display: grid; grid-template-columns: repeat(3,1fr);
+      gap: 1rem; margin-top: 2.5rem;
+    }
+    .stat {
+      text-align: center;
+      padding: 1.2rem;
+      border: 1px solid rgba(201,168,76,0.3);
+      background: white;
+    }
+    .stat-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem; color: var(--gold);
+    }
+    .stat-label { font-size: 0.75rem; color: #888; letter-spacing: 1px; text-transform: uppercase; }
+
+    /* ── COLLECTIONS ── */
+    .collections { background: var(--deep); }
+    .collections .section-label { color: var(--gold-light); }
+    .collections .section-title { color: var(--cream); }
+    .collections .section-title em { color: var(--gold); }
+    .collections .divider { background: linear-gradient(to right, var(--gold), transparent); }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1rem;
+    }
+    .card {
+      position: relative;
+      aspect-ratio: 3/4;
+      overflow: hidden;
+      cursor: pointer;
+      border: 1px solid rgba(201,168,76,0.15);
+    }
+    .card-bg {
+      width: 100%; height: 100%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 6rem;
+      transition: transform 0.6s ease;
+    }
+    .card:hover .card-bg { transform: scale(1.06); }
+    .card-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(26,15,0,0.9) 0%, transparent 50%);
+      display: flex; flex-direction: column;
+      justify-content: flex-end; padding: 1.5rem;
+      transition: background 0.4s;
+    }
+    .card:hover .card-overlay {
+      background: linear-gradient(to top, rgba(26,15,0,0.95) 0%, rgba(26,15,0,0.2) 50%);
+    }
+    .card-tag {
+      font-size: 0.65rem; letter-spacing: 2px;
+      text-transform: uppercase; color: var(--gold);
+      margin-bottom: 0.4rem;
+    }
+    .card-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem; color: var(--cream);
+    }
+    .card-desc {
+      font-size: 0.85rem; color: rgba(245,240,232,0.6);
+      margin-top: 0.4rem; line-height: 1.6;
+      max-height: 0; overflow: hidden;
+      transition: max-height 0.4s ease;
+    }
+    .card:hover .card-desc { max-height: 80px; }
+    .card-price {
+      font-size: 1rem; color: var(--gold-light);
+      margin-top: 0.6rem;
+    }
+    /* Card color themes */
+    .c1 { background: linear-gradient(135deg, #4a1010 0%, #1a0000 100%); }
+    .c2 { background: linear-gradient(135deg, #0a2e1a 0%, #001a0d 100%); }
+    .c3 { background: linear-gradient(135deg, #1a0f3a 0%, #0a0520 100%); }
+    .c4 { background: linear-gradient(135deg, #2e1a00 0%, #1a0f00 100%); }
+    .c5 { background: linear-gradient(135deg, #1a1a00 0%, #0f0f00 100%); }
+    .c6 { background: linear-gradient(135deg, #2e0a1a 0%, #1a0010 100%); }
+
+    /* ── PROCESS ── */
+    .process { background: var(--cream); }
+    .process-steps {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 0;
+      margin-top: 3rem;
+      border: 1px solid rgba(201,168,76,0.25);
+    }
+    .step {
+      padding: 2.5rem 2rem;
+      border-right: 1px solid rgba(201,168,76,0.25);
+      position: relative;
+      transition: background 0.3s;
+    }
+    .step:last-child { border-right: none; }
+    .step:hover { background: rgba(201,168,76,0.05); }
+    .step-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 3.5rem;
+      color: rgba(201,168,76,0.2);
+      line-height: 1;
+      margin-bottom: 0.8rem;
+    }
+    .step-icon { font-size: 1.8rem; margin-bottom: 0.8rem; }
+    .step h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem; color: var(--deep);
+      margin-bottom: 0.6rem;
+    }
+    .step p { font-size: 0.9rem; color: #6b5840; line-height: 1.7; }
+
+    /* ── TESTIMONIALS ── */
+    .testimonials { background: var(--maroon); }
+    .testimonials .section-label { color: rgba(245,240,232,0.5); }
+    .testimonials .section-title { color: var(--cream); }
+    .testimonials .section-title em { color: var(--gold); }
+    .testimonials .divider { background: linear-gradient(to right, var(--gold), transparent); }
+
+    .testi-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem; margin-top: 1rem;
+    }
+    .testi-card {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(201,168,76,0.2);
+      padding: 2rem;
+      transition: background 0.3s;
+    }
+    .testi-card:hover { background: rgba(255,255,255,0.12); }
+    .testi-quote {
+      font-size: 2rem; color: var(--gold); line-height: 1;
+      margin-bottom: 0.8rem;
+    }
+    .testi-text {
+      font-size: 1rem; color: rgba(245,240,232,0.85);
+      line-height: 1.8; font-style: italic;
+      margin-bottom: 1.2rem;
+    }
+    .testi-author { display: flex; align-items: center; gap: 0.8rem; }
+    .testi-avatar {
+      width: 42px; height: 42px; border-radius: 50%;
+      background: var(--gold); display: flex;
+      align-items: center; justify-content: center;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem; color: var(--deep);
+    }
+    .testi-name { color: var(--cream); font-size: 0.95rem; }
+    .testi-loc { color: rgba(245,240,232,0.5); font-size: 0.8rem; }
+
+    /* ── CONTACT ── */
+    .contact {
+      background: var(--ivory);
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 5rem; align-items: start;
+    }
+    .contact-info p { color: #5a4030; line-height: 1.9; font-size: 1.05rem; margin-bottom: 2rem; }
+    .contact-detail {
+      display: flex; gap: 1rem; align-items: flex-start;
+      margin-bottom: 1.2rem;
+    }
+    .contact-icon { font-size: 1.3rem; }
+    .contact-detail-text strong { display: block; color: var(--deep); font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 0.2rem; }
+    .contact-detail-text span { color: #6b5030; font-size: 1rem; }
+
+    .form-group { margin-bottom: 1.4rem; }
+    .form-group label {
+      display: block; font-size: 0.7rem; letter-spacing: 2px;
+      text-transform: uppercase; color: var(--maroon);
+      margin-bottom: 0.5rem;
+    }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 0.9rem 1.1rem;
+      background: white;
+      border: 1px solid rgba(107,26,26,0.2);
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem; color: var(--deep);
+      outline: none;
+      transition: border-color 0.3s;
+    }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus { border-color: var(--gold); }
+    .form-group textarea { resize: vertical; min-height: 120px; }
+    .btn-submit {
+      padding: 1rem 2.8rem;
+      background: var(--maroon);
+      color: var(--cream);
+      border: none; cursor: pointer;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem; letter-spacing: 2px;
+      text-transform: uppercase;
+      transition: background 0.3s, transform 0.2s;
+    }
+    .btn-submit:hover { background: var(--deep); transform: translateY(-2px); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--deep);
+      padding: 3rem 5vw 1.5rem;
+      text-align: center;
+    }
+    .footer-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem; color: var(--gold);
+      margin-bottom: 0.5rem;
+    }
+    .footer-logo em { font-style: italic; color: var(--gold-light); }
+    .footer-tagline {
+      font-family: 'Noto Nastaliq Urdu', serif;
+      color: rgba(245,240,232,0.4); font-size: 0.9rem;
+      margin-bottom: 2rem;
+    }
+    .footer-links {
+      display: flex; gap: 2rem; justify-content: center;
+      list-style: none; margin-bottom: 2rem;
+    }
+    .footer-links a { color: rgba(245,240,232,0.5); text-decoration: none; font-size: 0.85rem; letter-spacing: 1px; transition: color 0.3s; }
+    .footer-links a:hover { color: var(--gold); }
+    .footer-copy { color: rgba(245,240,232,0.25); font-size: 0.75rem; letter-spacing: 1px; }
+
+    /* ── SCROLL ANIMATIONS ── */
+    .reveal {
+      opacity: 0; transform: translateY(30px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .about, .contact { grid-template-columns: 1fr; gap: 3rem; }
+      .about-img { max-width: 360px; margin: 0 auto; }
+      .nav-links { display: none; }
+      .process-steps { grid-template-columns: 1fr 1fr; }
+      .step { border-bottom: 1px solid rgba(201,168,76,0.25); }
+    }
+    @media (max-width: 560px) {
+      .process-steps { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">ज़री <span>Kala</span></div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#collections">Collections</a></li>
+    <li><a href="#process">Process</a></li>
+    <li><a href="#contact">Order</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="mandala-bg">
+    <svg viewBox="0 0 800 800" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="400" cy="400" r="350" stroke="#c9a84c" stroke-width="1"/>
+      <circle cx="400" cy="400" r="280" stroke="#c9a84c" stroke-width="0.5"/>
+      <circle cx="400" cy="400" r="200" stroke="#c9a84c" stroke-width="1"/>
+      <circle cx="400" cy="400" r="120" stroke="#c9a84c" stroke-width="0.5"/>
+      <circle cx="400" cy="400" r="50" stroke="#c9a84c" stroke-width="1"/>
+      <!-- Petals -->
+      <g stroke="#c9a84c" stroke-width="0.5">
+        <line x1="400" y1="50" x2="400" y2="750"/>
+        <line x1="50" y1="400" x2="750" y2="400"/>
+        <line x1="150" y1="150" x2="650" y2="650"/>
+        <line x1="650" y1="150" x2="150" y2="650"/>
+        <line x1="225" y1="50" x2="575" y2="750"/>
+        <line x1="575" y1="50" x2="225" y2="750"/>
+        <line x1="50" y1="225" x2="750" y2="575"/>
+        <line x1="50" y1="575" x2="750" y2="225"/>
+      </g>
+      <!-- Diamonds -->
+      <polygon points="400,60 440,400 400,740 360,400" stroke="#c9a84c" stroke-width="0.5" fill="none"/>
+      <polygon points="60,400 400,440 740,400 400,360" stroke="#c9a84c" stroke-width="0.5" fill="none"/>
+    </svg>
+  </div>
+
+  <div class="hero-content">
+    <p class="hero-tagline">ہر دھاگے میں ایک کہانی</p>
+    <h1>Embroidery<em>&amp; Thread Art</em></h1>
+    <p class="hero-sub">
+      Handcrafted zari, zardozi, and silk thread designs — where centuries-old craft meets contemporary elegance.
+    </p>
+    <a href="#collections" class="hero-cta"><span>Explore Collections</span></a>
+  </div>
+  <div class="scroll-hint">Scroll</div>
+</section>
+
+<div class="border-pattern"></div>
+
+<!-- ABOUT -->
+<section class="about" id="about">
+  <div class="about-img reveal">
+    <div class="about-img-frame">🪡</div>
+    <div class="about-badge">
+      <strong>15+</strong>
+      Years of<br>Craft
+    </div>
+  </div>
+  <div class="about-text reveal">
+    <p class="section-label">Our Story</p>
+    <h2 class="section-title">Art Woven With<br><em>Tradition</em></h2>
+    <div class="divider"></div>
+    <p>
+      ज़री Kala was born from a deep reverence for South Asian embroidery traditions — zardozi, kantha, phulkari, and kashmiri crewel — passed down through generations of master craftspeople.
+    </p>
+    <p>
+      Every stitch is a dialogue between past and present. We blend age-old techniques with fresh, modern aesthetics to create pieces that belong in heirlooms and contemporary wardrobes alike.
+    </p>
+    <div class="stats-row">
+      <div class="stat"><div class="stat-num">800+</div><div class="stat-label">Designs</div></div>
+      <div class="stat"><div class="stat-num">40+</div><div class="stat-label">Artisans</div></div>
+      <div class="stat"><div class="stat-num">12</div><div class="stat-label">Countries</div></div>
+    </div>
+  </div>
+</section>
+
+<div class="border-pattern"></div>
+
+<!-- COLLECTIONS -->
+<section class="collections" id="collections">
+  <div class="reveal">
+    <p class="section-label">Our Work</p>
+    <h2 class="section-title">Signature <em>Collections</em></h2>
+    <div class="divider"></div>
+  </div>
+  <div class="cards-grid">
+    <div class="card reveal">
+      <div class="card-bg c1">🌹</div>
+      <div class="card-overlay">
+        <div class="card-tag">Bridal</div>
+        <div class="card-name">Zardozi Bloom</div>
+        <div class="card-desc">Heavy gold-thread zardozi with pearl accents. Perfect for bridal dupattas and lehengas.</div>
+        <div class="card-price">From ₹4,500</div>
+      </div>
+    </div>
+    <div class="card reveal">
+      <div class="card-bg c2">🦚</div>
+      <div class="card-overlay">
+        <div class="card-tag">Ethnic Wear</div>
+        <div class="card-name">Phulkari Garden</div>
+        <div class="card-desc">Vibrant silk floss on handloom cloth — Punjabi phulkari in contemporary hues.</div>
+        <div class="card-price">From ₹2,800</div>
+      </div>
+    </div>
+    <div class="card reveal">
+      <div class="card-bg c3">🌙</div>
+      <div class="card-overlay">
+        <div class="card-tag">Kashmiri</div>
+        <div class="card-name">Crewel Nights</div>
+        <div class="card-desc">Woollen crewelwork inspired by Kashmir's garden motifs — nature in every thread.</div>
+        <div class="card-price">From ₹3,200</div>
+      </div>
+    </div>
+    <div class="card reveal">
+      <div class="card-bg c4">🏵️</div>
+      <div class="card-overlay">
+        <div class="card-tag">Heritage</div>
+        <div class="card-name">Kantha Reverie</div>
+        <div class="card-desc">Running-stitch kantha on vintage cotton — layered textures with folk narrative.</div>
+        <div class="card-price">From ₹1,900</div>
+      </div>
+    </div>
+    <div class="card reveal">
+      <div class="card-bg c5">✨</div>
+      <div class="card-overlay">
+        <div class="card-tag">Festive</div>
+        <div class="card-name">Gota Patti</div>
+        <div class="card-desc">Rajasthani ribbon-work with mirror insets — celebratory brilliance for every festive look.</div>
+        <div class="card-price">From ₹2,200</div>
+      </div>
+    </div>
+    <div class="card reveal">
+      <div class="card-bg c6">🌺</div>
+      <div class="card-overlay">
+        <div class="card-tag">Custom</div>
+        <div class="card-name">Bespoke Studio</div>
+        <div class="card-desc">Your vision, our needlework. Custom monograms, portraits, and motif design on request.</div>
+        <div class="card-price">Price on Request</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="border-pattern"></div>
+
+<!-- PROCESS -->
+<section class="process" id="process">
+  <div class="reveal" style="text-align:center; max-width:600px; margin:0 auto 0;">
+    <p class="section-label">How It Works</p>
+    <h2 class="section-title">From <em>Thread</em> to Treasure</h2>
+    <div class="divider" style="margin:1.5rem auto 0;"></div>
+  </div>
+  <div class="process-steps reveal">
+    <div class="step">
+      <div class="step-num">01</div>
+      <div class="step-icon">💬</div>
+      <h3>Consult</h3>
+      <p>Share your vision — garment, occasion, budget, and motif preferences with our design team.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">02</div>
+      <div class="step-icon">✏️</div>
+      <h3>Design</h3>
+      <p>We create a hand-drawn layout, select threads, and present swatches for your approval.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">03</div>
+      <div class="step-icon">🪡</div>
+      <h3>Embroider</h3>
+      <p>Our artisans begin stitching — each piece takes between 3 days and 3 weeks depending on complexity.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">04</div>
+      <div class="step-icon">📦</div>
+      <h3>Deliver</h3>
+      <p>Your masterpiece is wrapped in tissue and muslin, and shipped safely to your door worldwide.</p>
+    </div>
+  </div>
+</section>
+
+<div class="border-pattern"></div>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials">
+  <div class="reveal" style="text-align:center; max-width:600px; margin:0 auto 2rem;">
+    <p class="section-label">Client Stories</p>
+    <h2 class="section-title">Words of <em>Love</em></h2>
+    <div class="divider" style="margin:1.5rem auto 0;"></div>
+  </div>
+  <div class="testi-grid">
+    <div class="testi-card reveal">
+      <div class="testi-quote">"</div>
+      <p class="testi-text">The zardozi dupatta for my nikah was breathtaking. Guests couldn't stop asking where it was made. Every stitch told a story.</p>
+      <div class="testi-author">
+        <div class="testi-avatar">A</div>
+        <div>
+          <div class="testi-name">Ayesha Malik</div>
+          <div class="testi-loc">Lahore, Pakistan</div>
+        </div>
+      </div>
+    </div>
+    <div class="testi-card reveal">
+      <div class="testi-quote">"</div>
+      <p class="testi-text">I ordered a custom phulkari wall panel for our living room — it's the centrepiece of our home now. Shipped beautifully to Canada!</p>
+      <div class="testi-author">
+        <div class="testi-avatar">P</div>
+        <div>
+          <div class="testi-name">Priya Dhillon</div>
+          <div class="testi-loc">Toronto, Canada</div>
+        </div>
+      </div>
+    </div>
+    <div class="testi-card reveal">
+      <div class="testi-quote">"</div>
+      <p class="testi-text">As a fashion designer, quality matters immensely. ज़री Kala's crewelwork is the finest I've sourced — consistent, detailed, and on time.</p>
+      <div class="testi-author">
+        <div class="testi-avatar">R</div>
+        <div>
+          <div class="testi-name">Rohan Mehta</div>
+          <div class="testi-loc">Mumbai, India</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="border-pattern"></div>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div class="contact-info reveal">
+    <p class="section-label">Get In Touch</p>
+    <h2 class="section-title">Place Your <em>Order</em></h2>
+    <div class="divider"></div>
+    <p>Whether you have a clear vision or just a feeling — our team is here to guide you. Fill the form or reach us directly.</p>
+    <div class="contact-detail">
+      <div class="contact-icon">📍</div>
+      <div class="contact-detail-text">
+        <strong>Studio</strong>
+        <span>Craftsmen's Lane, Old City Quarter, Lucknow</span>
+      </div>
+    </div>
+    <div class="contact-detail">
+      <div class="contact-icon">📞</div>
+      <div class="contact-detail-text">
+        <strong>Phone / WhatsApp</strong>
+        <span>+91 98765 43210</span>
+      </div>
+    </div>
+    <div class="contact-detail">
+      <div class="contact-icon">✉️</div>
+      <div class="contact-detail-text">
+        <strong>Email</strong>
+        <span>studio@zarikala.com</span>
+      </div>
+    </div>
+  </div>
+  <div class="contact-form reveal">
+    <div class="form-group">
+      <label>Your Name</label>
+      <input type="text" placeholder="Fatima / Priya / Sara…"/>
+    </div>
+    <div class="form-group">
+      <label>Email Address</label>
+      <input type="email" placeholder="your@email.com"/>
+    </div>
+    <div class="form-group">
+      <label>Design Type</label>
+      <select>
+        <option value="">— Select a collection —</option>
+        <option>Zardozi Bloom (Bridal)</option>
+        <option>Phulkari Garden</option>
+        <option>Crewel Nights (Kashmiri)</option>
+        <option>Kantha Reverie</option>
+        <option>Gota Patti (Festive)</option>
+        <option>Bespoke / Custom Design</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Tell Us Your Vision</label>
+      <textarea placeholder="Describe the garment, occasion, colours, any reference images you have…"></textarea>
+    </div>
+    <button class="btn-submit">Send Inquiry ✦</button>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">ज़री <em>Kala</em></div>
+  <p class="footer-tagline">ہر دھاگے میں محبت — Love in every thread</p>
+  <ul class="footer-links">
+    <li><a href="#home">Home</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#collections">Collections</a></li>
+    <li><a href="#process">Process</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <div class="border-pattern" style="margin-bottom:1.5rem; opacity:0.2;"></div>
+  <p class="footer-copy">© 2026 ज़री Kala Embroidery Studio · All Rights Reserved</p>
+</footer>
+
+<script>
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 80);
+      }
+    });
+  }, { threshold: 0.12 });
+  reveals.forEach(el => obs.observe(el));
+
+  // Smooth nav highlight
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      document.querySelector(a.getAttribute('href'))
+        ?.scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+</script>
+</body>
+</html>
